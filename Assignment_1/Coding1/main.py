@@ -24,8 +24,10 @@ Student Code of Conduct.
 
 from NN import *
 from utils import plot_curves, load_mnist_test, load_mnist_train
+import time
 
 def main():
+    start_time = time.time()
     x_train, y_train, x_val, y_val = load_mnist_train()
     x_test, y_test = load_mnist_test()
 
@@ -34,21 +36,21 @@ def main():
     num_classes = 10
     batch_size = 64
     num_epochs = 10
-    learning_rate = .001
-    hidden_layer_size = 128
+    learning_rate = .01
+    hidden_layer_size = 64
 
-    # Initialize model 1
-    net = NeuralNetwork()
-    net.add(FullyConnectedLayer(input_size, num_classes))
-    net.add(ReLUActivationLayer())
-    net.add(SoftmaxLayer())
+    # # Initialize model 1
+    # net = NeuralNetwork()
+    # net.add(FullyConnectedLayer(input_size, num_classes))
+    # net.add(SigmoidActivationLayer())
+    # net.add(SoftmaxLayer())
  
     # Initialize model 2
-    # net = NeuralNetwork()
-    # net.add(FullyConnectedLayer(input_size,hidden_layer_size))
-    # net.add(SigmoidActivationLayer())
-    # net.add(FullyConnectedLayer(hidden_layer_size,num_classes))
-    # net.add(SoftmaxLayer())
+    net = NeuralNetwork()
+    net.add(FullyConnectedLayer(input_size,hidden_layer_size))
+    net.add(ReLUActivationLayer())
+    net.add(FullyConnectedLayer(hidden_layer_size,num_classes))
+    net.add(SoftmaxLayer())
 
     net.fit(x_train, y_train, x_val, y_val, epochs=num_epochs, learning_rate=learning_rate, batch_size=batch_size)
 
@@ -57,7 +59,10 @@ def main():
     print(f'Training Accuracy: {training_accuracy:.4f}')
     print(f'Test Accuracy: {test_accuracy:.4f}')
 
-    plot_curves(net.train_loss_history, net.train_acc_history, net.val_loss_history, net.val_acc_history)
+    end_time = time.time()
+    print(f'Time taken: {end_time - start_time:.2f} seconds')
+
+    plot_curves(net.train_loss_history, net.train_acc_history, net.val_loss_history, net.val_acc_history, learning_rate)
 
 if __name__ == "__main__":
     main()
