@@ -69,8 +69,7 @@ class SigmoidActivationLayer:
         #       return its output times the output_gradient                         #
         #############################################################################
         local_gradient = sigmoid_prime(self.input)
-        
-        # Chain rule: multiply local gradient with incoming gradient
+       
         return local_gradient * output_gradient
 
         #############################################################################
@@ -181,10 +180,10 @@ class SoftmaxLayer:
 
         shifted_input = input_data - np.max(input_data, axis=1, keepdims=True)
         
-        # Compute exponential of the shifted input
+        # compute exponential of the shifted input
         exp_values = np.exp(shifted_input)
         
-        # Normalize by dividing by the sum of exponentials for each row
+        # normalize by dividing by the sum of exponentials
         self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
         
         return self.output
@@ -289,12 +288,10 @@ class FullyConnectedLayer:
         #############################################################################
 
         self.delta_w = np.dot(self.input.T, output_gradient)
-        
-        # Calculate gradients for bias
+
         # grad_b = sum of output_gradient across all samples
         self.delta_b = np.sum(output_gradient, axis=0, keepdims=True)
-        
-        # Calculate gradient with respect to input
+
         # grad_input = output_gradient * weights.T
         input_gradient = np.dot(output_gradient, self.weights.T)
         
@@ -433,31 +430,27 @@ class NeuralNetwork:
             # val_loss_avg = val_loss_sum / x_val.shape[0]
 
 
-            # Fixed validation loss calculation
-            # Process validation data in batches, similar to how training data is processed
+
             val_loss_sum = 0
-            val_batch_size = batch_size  # Can use the same batch size as training
+            val_batch_size = batch_size 
             n_val = x_val.shape[0]
             num_val_batches = 0
 
             for i in range(0, n_val, val_batch_size):
-                # Get a batch of validation data
+                # get a batch of validation data
                 x_val_batch = x_val[i:i+val_batch_size]
                 y_val_batch = y_val[i:i+val_batch_size]
                 
-                # Forward pass
+                # forward pass
                 output = x_val_batch
                 for layer in self.layers:
                     output = layer.forward(output)
                 
-                # Compute loss for this batch
+                # compute loss for this batch
                 val_loss_sum += cross_entropy(y_val_batch, output)
                 num_val_batches += 1
 
-            # Average the loss over all batches
             val_loss_avg = val_loss_sum / num_val_batches
-
-            # Compute validation accuracy
             val_accuracy = self.compute_accuracy(x_val, y_val)
 
             # Store loss and accuracy for plotting
@@ -578,19 +571,11 @@ def cross_entropy(y, y_pred):
     #    1) Implement Cross-Entropy Loss                                        #
     #############################################################################
 
-    # Add a small epsilon to prevent taking log of zero
+    # small epsilon to prevent taking log of zero
     epsilon = 1e-15
-    
-    # Clip predictions to avoid numerical instability
+
     y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
-    
-    # Calculate cross-entropy loss
-    # For each sample, we sum -y_true * log(y_pred) over all classes
-    # Then we average over all samples
-    N = y.shape[0]  # Number of samples
-    
-    # Calculate negative log likelihood for each sample and class
-    # Only the true class (where y is 1) will contribute to the sum
+    N = y.shape[0]
     loss = -np.sum(y * np.log(y_pred)) / N
 
     #############################################################################

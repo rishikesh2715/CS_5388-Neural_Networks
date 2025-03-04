@@ -36,21 +36,21 @@ def main():
     num_classes = 10
     batch_size = 64
     num_epochs = 10
-    learning_rate = .01
-    hidden_layer_size = 64
+    learning_rate = .001
+    hidden_layer_size = 128
 
-    # # Initialize model 1
-    # net = NeuralNetwork()
-    # net.add(FullyConnectedLayer(input_size, num_classes))
-    # net.add(SigmoidActivationLayer())
-    # net.add(SoftmaxLayer())
- 
-    # Initialize model 2
+    # Initialize model 1
     net = NeuralNetwork()
-    net.add(FullyConnectedLayer(input_size,hidden_layer_size))
-    net.add(ReLUActivationLayer())
-    net.add(FullyConnectedLayer(hidden_layer_size,num_classes))
+    net.add(FullyConnectedLayer(input_size, num_classes))
+    net.add(SigmoidActivationLayer())
     net.add(SoftmaxLayer())
+ 
+    # # Initialize model 2
+    # net = NeuralNetwork()
+    # net.add(FullyConnectedLayer(input_size,hidden_layer_size))
+    # net.add(ReLUActivationLayer())
+    # net.add(FullyConnectedLayer(hidden_layer_size,num_classes))
+    # net.add(SoftmaxLayer())
 
     net.fit(x_train, y_train, x_val, y_val, epochs=num_epochs, learning_rate=learning_rate, batch_size=batch_size)
 

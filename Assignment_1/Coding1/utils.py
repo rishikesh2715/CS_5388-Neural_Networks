@@ -74,21 +74,16 @@ def load_mnist_train():
     #       data. Use 80% of your data for training and 20% of your data for    #
     #       validation. Note: Don't shuffle here.                               #
     #############################################################################
-    # One-hot encode the labels
+    # one-shot encode 
     num_samples = len(label)
-    num_classes = 10  # MNIST has 10 classes (0-9)
-    
-    # Initialize one-hot encoded labels array
+    num_classes = 10 
     one_hot_labels = np.zeros((num_samples, num_classes))
-    
-    # Set the appropriate indices to 1
+
     for i in range(num_samples):
         one_hot_labels[i, label[i]] = 1
     
-    # Calculate split point at 80%
+    # 80-20 split for training and validation data
     split_idx = int(0.8 * num_samples)
-    
-    # Split the data into training (80%) and validation (20%)
     train_data = data[:split_idx]
     train_label = one_hot_labels[:split_idx]
     val_data = data[split_idx:]
@@ -118,25 +113,20 @@ def load_mnist_test():
     # TODO:                                                                     #       
     #    1) One-hot encode the labels                                           #
     #############################################################################
-    # One-hot encode the labels
+    # one-hot encode the labels
     num_samples = len(label)
-    num_classes = 10  # MNIST has 10 classes (0-9)
-    
-    # Initialize one-hot encoded labels array
+    num_classes = 10
+
     one_hot_labels = np.zeros((num_samples, num_classes))
-    
-    # Set the appropriate indices to 1
+
     for i in range(num_samples):
         one_hot_labels[i, label[i]] = 1
     
-    # Return data and one-hot encoded labels
-    return data, one_hot_labels
-
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
 
-    return data, label
+    return data, one_hot_labels
 
 
 
@@ -156,11 +146,10 @@ def plot_curves(train_loss_history, train_acc_history, valid_loss_history, valid
     #    2) Plot learning curves of training and validation accuracy            #
     #############################################################################
 
-    # Create figure for loss curves
-    plt.figure(figsize=(10, 5))
     epochs = range(1, len(train_loss_history) + 1)
-    
-    # Plot training and validation loss
+
+    # plot for loss curves
+    plt.figure(figsize=(10, 5))
     plt.plot(epochs, train_loss_history, 'b-', label='Training Loss')
     plt.plot(epochs, valid_loss_history, 'r-', label='Validation Loss')
     plt.title('Training and Validation Loss with learning rate: {}'.format(learning_rate))
@@ -169,13 +158,8 @@ def plot_curves(train_loss_history, train_acc_history, valid_loss_history, valid
     plt.legend()
     plt.grid(True)
     
-    # Save loss figure
-    plt.savefig('loss_curves.png')
-    
-    # Create figure for accuracy curves
+    # plot for accuracy curves
     plt.figure(figsize=(10, 5))
-    
-    # Plot training and validation accuracy
     plt.plot(epochs, train_acc_history, 'b-', label='Training Accuracy')
     plt.plot(epochs, valid_acc_history, 'r-', label='Validation Accuracy')
     plt.title('Training and Validation Accuracy with learning rate: {}'.format(learning_rate))
@@ -184,10 +168,7 @@ def plot_curves(train_loss_history, train_acc_history, valid_loss_history, valid
     plt.legend()
     plt.grid(True)
     
-    # Save accuracy figure
-    plt.savefig('accuracy_curves.png')
-    
-    # Show plots
+    plt.tight_layout()
     plt.show()
 
     #############################################################################
